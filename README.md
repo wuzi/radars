@@ -28,7 +28,7 @@ public OnPlayerEnterRadar(playerid, radarid, speed)
 {
     if(radarid == gRadar)
     {
-        GameTextForPlayer(playerid,"~n~~n~~n~~n~~n~~n~~r~You were fined!", 5000, 3);
+        GameTextForPlayer(playerid,"~r~You were fined!", 5000, 3);
         GivePlayerMoney(playerid, -500);
     }
     return 1;
