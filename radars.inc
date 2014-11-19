@@ -91,7 +91,7 @@ static g_radarTimerID;
 //------------------------------------------------------------------------------
 
 forward OnRadarUpdate();
-forward OnPlayerEnterRadar(playerid, radarid, speed);
+forward OnPlayerEnterRadar(playerid, radarid, Float:speed);
 
 //------------------------------------------------------------------------------
 
@@ -328,7 +328,7 @@ stock GetFreeRadarID()
 stock Float:_getPlayerSpeed(playerid, bool:UseMPH = false)
 {
     new Float:speed_x,Float:speed_y,Float:speed_z,Float:temp_speed;
-    GetVehicleVelocity(vehicleid,speed_x,speed_y,speed_z);
+    GetVehicleVelocity(GetPlayerVehicleID(playerid), speed_x, speed_y, speed_z);
     if(UseMPH == false) temp_speed = floatsqroot(((speed_x*speed_x)+(speed_y*speed_y))+(speed_z*speed_z))*136.666667;
     else temp_speed = floatsqroot(((speed_x*speed_x)+(speed_y*speed_y))+(speed_z*speed_z))*85.4166672;
     floatround(temp_speed,floatround_round);
