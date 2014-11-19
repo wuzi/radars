@@ -26,10 +26,13 @@ public OnGameModeInit()
 
 public OnPlayerEnterRadar(playerid, radarid, speed)
 {
-    if(radarid == gRadar)
+    switch(radarid)
     {
-        GameTextForPlayer(playerid,"~r~You were fined!", 5000, 3);
-        GivePlayerMoney(playerid, -500);
+        case gRadar:
+        {
+            GameTextForPlayer(playerid,"~r~You were fined!", 5000, 3);
+            GivePlayerMoney(playerid, -500);
+        }
     }
     return 1;
 }
