@@ -4,19 +4,14 @@ A SA:MP library containing functions to create radars that detect when a player 
 
 ##Creating a radar
 
-You can use JernejL's map editor to position the radar:
+Use the radar creator filterscript to create and save radars.
 
-![](http://img819.imageshack.us/img819/1883/screenshotfrom201302140.th.png?)
+![](https://sc-cdn.scaleengine.net/i/da34b2f0d2341945fcea4538fdcd5adc.jpg)
 
-[Full Image](https://sc-cdn.scaleengine.net/i/7dc9b3401590edf5e104a7863e7512dd.png)
+![](https://sc-cdn.scaleengine.net/i/4e333249e609edb0cc29a0bf0b9660c9.jpg)
 
-![http://img228.imageshack.us/img228/1883/screenshotfrom201302140.th.png](http://img228.imageshack.us/img228/1883/screenshotfrom201302140.th.png)
-
-[Full Image](https://sc-cdn.scaleengine.net/i/ae8b6bcdcc03ddcb12a1493446ce0209.png)
-
-![http://img41.imageshack.us/img41/5025/sampscreen.th.png](http://img41.imageshack.us/img41/5025/sampscreen.th.png)
-
-[Full Image](https://sc-cdn.scaleengine.net/i/943997791bfaab40c001b68c3e5b67ca.png)
+![](https://sc-cdn.scaleengine.net/i/e41a075b5682565b74bb949f29d8c43b.jpg)
+This may look awkward but it is because i am using wine, on windows it will be okay.
 
 ```c
 public OnGameModeInit()
@@ -47,10 +42,6 @@ public OnPlayerEnterRadar(playerid, radarid, speed)
     return 1;
 }
 ```
-
-##In-game creator
-
-I might create an in-game creator in the future.
 
 ##Documentation
 
