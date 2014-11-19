@@ -6,17 +6,17 @@ A SA:MP library containing functions to create radars that detect when a player 
 
 You can use JernejL's map editor to position the radar:
 
-![http://img819.imageshack.us/img819/1883/screenshotfrom201302140.th.png](http://img819.imageshack.us/img819/1883/screenshotfrom201302140.th.png)
+![](http://img819.imageshack.us/img819/1883/screenshotfrom201302140.th.png?)
 
-[Full Image](http://img819.imageshack.us/img819/1883/screenshotfrom201302140.png)
+[Full Image](https://sc-cdn.scaleengine.net/i/7dc9b3401590edf5e104a7863e7512dd.png)
 
 ![http://img228.imageshack.us/img228/1883/screenshotfrom201302140.th.png](http://img228.imageshack.us/img228/1883/screenshotfrom201302140.th.png)
 
-[Full Image](http://img228.imageshack.us/img228/1883/screenshotfrom201302140.png)
+[Full Image](https://sc-cdn.scaleengine.net/i/ae8b6bcdcc03ddcb12a1493446ce0209.png)
 
 ![http://img41.imageshack.us/img41/5025/sampscreen.th.png](http://img41.imageshack.us/img41/5025/sampscreen.th.png)
 
-[Full Image](http://img41.imageshack.us/img41/5025/sampscreen.png)
+[Full Image](https://sc-cdn.scaleengine.net/i/943997791bfaab40c001b68c3e5b67ca.png)
 
 ```c
 public OnGameModeInit()
