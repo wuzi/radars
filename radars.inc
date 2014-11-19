@@ -95,7 +95,7 @@ forward OnPlayerEnterRadar(playerid, radarid, speed);
 
 //------------------------------------------------------------------------------
 
-stock CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0, MaxSpeed = 140, Float:Radius = 15.0, bool:isActive = true)
+stock CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0, MaxSpeed = 80, Float:Radius = 15.0, bool:isActive = true)
 {
 	new radarid = GetFreeRadarID();
 
@@ -325,17 +325,14 @@ stock GetFreeRadarID()
 
 // -----------------------------------------------------------------------------
 
-stock _getPlayerSpeed(playerid)
+stock Float:_getPlayerSpeed(playerid, bool:UseMPH = false)
 {
-	new Float:Vx,
-		Float:Vy,
-		Float:Vz,
-		Float:rtn;
-	if(IsPlayerInAnyVehicle(playerid))
-		GetVehicleVelocity(GetPlayerVehicleID(playerid),Vx,Vy,Vz);
-
-	rtn = floatsqroot(floatabs(floatpower(Vx + Vy + Vz,2)));
-	return floatround(rtn * 100 * 1.61);
+    new Float:speed_x,Float:speed_y,Float:speed_z,Float:temp_speed;
+    GetVehicleVelocity(vehicleid,speed_x,speed_y,speed_z);
+    if(UseMPH == false) temp_speed = floatsqroot(((speed_x*speed_x)+(speed_y*speed_y))+(speed_z*speed_z))*136.666667;
+    else temp_speed = floatsqroot(((speed_x*speed_x)+(speed_y*speed_y))+(speed_z*speed_z))*85.4166672;
+    floatround(temp_speed,floatround_round);
+    return temp_speed;
 }
 
 // -----------------------------------------------------------------------------
