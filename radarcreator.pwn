@@ -46,7 +46,7 @@
 
 #define DIALOG_UPDATES		2157
 #define DIALOG_EDITOR		2158
-#define DIALOG_CAPTION		"Radar Editor 1.0"
+#define DIALOG_CAPTION		"Radar Editor 1.1"
 #define DIALOG_INFO			"1.\tCreate a Radar\n2.\tEdit nearest radar\n3.\tGo to radar\n4.\tExport nearest radar\n5.\tExport all radars\n6.\tUpdates"
 
 #define COLOR_INFO			0x00a4a7ff
