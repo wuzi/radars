@@ -12,7 +12,7 @@ You can use JernejL's map editor to position the radar:
 
 ![http://img41.imageshack.us/img41/5025/sampscreen.png](http://img41.imageshack.us/img41/5025/sampscreen.th.png)
 
-```
+```c
 public OnGameModeInit()
 {
 	CreateRadar(1146.78, -1390.08, 12.83,   0.00, 0.00, 270.00);
@@ -22,7 +22,7 @@ public OnGameModeInit()
 
 ##Example code
 
-```
+```c
 new g_radarTest;
 
 public OnGameModeInit()
