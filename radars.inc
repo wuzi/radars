@@ -32,7 +32,7 @@
 		Y_Less - ALS Hooking method
 
 	Version:
-		0.2
+		0.4
 */
 
 //------------------------------------------------------------------------------
@@ -53,7 +53,9 @@ native GetRadarPosition(radarid, &Float:Y, &Float:Z, &Float:rX, &Float:rY, &Floa
 native SetRadarActivated(radarid, bool:activated);
 native SetRadarRadius(radarid, Float:radius);
 native SetRadarMaxSpeed(radarid, maxspeed);
-native IsRadarActivated(radarid);
+native IsPlayerInRadar(playerid, radarid)
+native IsPlayerInAnyRadar(playerid)
+native IsRadarActivated(radarid)
 native GetRadarMaxSpeed(radarid);
 native GetRadarObjectID(radarid);
 native GetRadarRadius(radarid);
@@ -81,21 +83,19 @@ enum E_RADAR_DATA
 	Float:E_RADAR_ROT[3],
 	Float:E_RADAR_DRAWDIST,
 	Float:E_RADAR_RADIUS,
+	Float:E_RADAR_MAXSPEED,
 	bool:E_RADAR_ISACTIVE,
-	E_RADAR_MAXSPEED,
 	E_RADAR_OBJECTID
 }
 static g_eRadarData[MAX_RADARS][E_RADAR_DATA];
-static g_radarTimerID;
 
 //------------------------------------------------------------------------------
 
-forward OnRadarUpdate();
 forward OnPlayerEnterRadar(playerid, radarid, Float:speed);
 
 //------------------------------------------------------------------------------
 
-stock CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0, MaxSpeed = 80, Float:Radius = 15.0, bool:isActive = true)
+stock CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0, Float:MaxSpeed = 80.0, Float:Radius = 15.0, bool:isActive = true)
 {
 	new radarid = GetFreeRadarID();
 
@@ -151,10 +151,10 @@ stock DestroyRadar(radarid)
 	g_eRadarData[radarid][E_RADAR_ROT][1]		= 0.0;
 	g_eRadarData[radarid][E_RADAR_ROT][2]		= 0.0;
 
-	g_eRadarData[radarid][E_RADAR_DRAWDIST]		= 0;
-	g_eRadarData[radarid][E_RADAR_MAXSPEED]		= 0;
+	g_eRadarData[radarid][E_RADAR_DRAWDIST]		= 0.0;
+	g_eRadarData[radarid][E_RADAR_MAXSPEED]		= 0.0;
 
-	g_eRadarData[radarid][E_RADAR_RADIUS] 		= 0;
+	g_eRadarData[radarid][E_RADAR_RADIUS] 		= 0.0;
 	g_eRadarData[radarid][E_RADAR_ISACTIVE]		= false;
 	return 1;
 }
@@ -204,15 +204,13 @@ stock Float:GetRadarRadius(radarid)
 
 // -----------------------------------------------------------------------------
 
-stock SetRadarMaxSpeed(radarid, maxspeed)
+stock SetRadarMaxSpeed(radarid, Float:maxspeed)
 	return g_eRadarData[radarid][E_RADAR_MAXSPEED] = maxspeed;
 
 // -----------------------------------------------------------------------------
 
-stock GetRadarMaxSpeed(radarid)
-{
+stock Float:GetRadarMaxSpeed(radarid)
 	return g_eRadarData[radarid][E_RADAR_MAXSPEED];
-}
 
 // -----------------------------------------------------------------------------
 
@@ -237,91 +235,30 @@ stock GetFreeRadarID()
 
 // -----------------------------------------------------------------------------
 
-#if defined FILTERSCRIPT
-	public OnFilterScriptInit()
+stock IsPlayerInAnyRadar(playerid)
+{
+	for(new i; i < MAX_RADARS; i++)
 	{
-		g_radarTimerID = SetTimer("OnRadarUpdate", 1000, true);
-		#if defined inc_Radars_OnFilterScriptInit
-			return inc_Radars_OnFilterScriptInit();
-		#else
+		if(!IsValidRadar(i) || !IsRadarActivated(i))
+			continue;
+
+		if(IsPlayerInRangeOfPoint(playerid, g_eRadarData[i][E_RADAR_RADIUS], g_eRadarData[i][E_RADAR_POS][0], g_eRadarData[i][E_RADAR_POS][1], g_eRadarData[i][E_RADAR_POS][2]))
 			return 1;
-		#endif
 	}
-	#if defined _ALS_OnFilterScriptInit
-		#undef OnFilterScriptInit
-	#else
-		#define _ALS_OnFilterScriptInit
-	#endif
-	 
-	#define OnFilterScriptInit inc_Radars_OnFilterScriptInit
-	#if defined inc_Radars_OnFilterScriptInit
-		forward inc_Radars_OnFilterScriptInit();
-	#endif
+	return 0;
+}
 
 // -----------------------------------------------------------------------------
 
-	public OnFilterScriptExit()
-	{
-		KillTimer(g_radarTimerID);
-		#if defined inc_Radars_OnFilterScriptExit
-			return inc_Radars_OnFilterScriptExit();
-		#else
-			return 1;
-		#endif
-	}
-	#if defined _ALS_OnFilterScriptExit
-		#undef OnFilterScriptExit
-	#else
-		#define _ALS_OnFilterScriptExit
-	#endif
-	 
-	#define OnFilterScriptExit inc_Radars_OnFilterScriptExit
-	#if defined inc_Radars_OnFilterScriptExit
-		forward inc_Radars_OnFilterScriptExit();
-	#endif
-#else
-	public OnGameModeInit()
-	{
-		g_radarTimerID = SetTimer("OnRadarUpdate", 1000, true);
-		#if defined inc_Radars_OnGameModeInit
-			return inc_Radars_OnGameModeInit();
-		#else
-			return 1;
-		#endif
-	}
-	#if defined _ALS_OnGameModeInit
-		#undef OnGameModeInit
-	#else
-		#define _ALS_OnGameModeInit
-	#endif
-	 
-	#define OnGameModeInit inc_Radars_OnGameModeInit
-	#if defined inc_Radars_OnGameModeInit
-		forward inc_Radars_OnGameModeInit();
-	#endif
+stock IsPlayerInRadar(playerid, radarid)
+{
+	if(!IsValidRadar(radarid) || !IsRadarActivated(radarid))
+		return 0;
 
-// -----------------------------------------------------------------------------
-
-	public OnGameModeExit()
-	{
-		KillTimer(g_radarTimerID);
-		#if defined inc_Radars_OnGameModeExit
-			return inc_Radars_OnGameModeExit();
-		#else
-			return 1;
-		#endif
-	}
-	#if defined _ALS_OnGameModeExit
-		#undef OnGameModeExit
-	#else
-		#define _ALS_OnGameModeExit
-	#endif
-	 
-	#define OnGameModeExit inc_Radars_OnGameModeExit
-	#if defined inc_Radars_OnGameModeExit
-		forward inc_Radars_OnGameModeExit();
-	#endif
-#endif
+	if(IsPlayerInRangeOfPoint(playerid, g_eRadarData[radarid][E_RADAR_RADIUS], g_eRadarData[radarid][E_RADAR_POS][0], g_eRadarData[radarid][E_RADAR_POS][1], g_eRadarData[radarid][E_RADAR_POS][2]))
+		return 1;
+	return 0;
+}
 
 // -----------------------------------------------------------------------------
 
@@ -337,38 +274,46 @@ stock Float:_getPlayerSpeed(playerid, bool:UseMPH = false)
 
 // -----------------------------------------------------------------------------
 
-public OnRadarUpdate()
+public OnPlayerUpdate(playerid)
 {
-	for(new slots = GetMaxPlayers(), i; i < slots; i++)
+	if(GetPVarInt(playerid, "radarTick") < GetTickCount())
 	{
-		if(!IsPlayerConnected(i))
-			continue;
-
-		if(GetPVarInt(i, "enteredRadar"))
+		SetPVarInt(playerid, "radarTick", GetTickCount() + 250);
+		if(GetPVarInt(playerid, "enteredRadar") && !IsPlayerInAnyRadar(playerid))
 		{
-			DeletePVar(i, "enteredRadar");
-			continue;
+			DeletePVar(playerid, "enteredRadar");
 		}
-
-		for(new r; r < MAX_RADARS; r++)
+		else if(!GetPVarInt(playerid, "enteredRadar") && IsPlayerInAnyRadar(playerid))
 		{
-			if(!IsValidRadar(r) || !IsRadarActivated(r))
-				continue;
+			for(new r; r < MAX_RADARS; r++)
+			{
+				if(!IsPlayerInRadar(playerid, r))
+					continue;
 
-			if(!IsPlayerInRangeOfPoint(i, g_eRadarData[r][E_RADAR_RADIUS],  g_eRadarData[r][E_RADAR_POS][0],  g_eRadarData[r][E_RADAR_POS][1],  g_eRadarData[r][E_RADAR_POS][2]))
-				continue;
+				if(_getPlayerSpeed(playerid) < g_eRadarData[r][E_RADAR_MAXSPEED])
+					continue;
 
-			if(_getPlayerSpeed(i) < g_eRadarData[r][E_RADAR_MAXSPEED])
-				continue;
-
-			OnPlayerEnterRadar(i, i, _getPlayerSpeed(i));
-			SetPVarInt(i, "enteredRadar", 1);
+				SetPVarInt(playerid, "enteredRadar", 1);
+				OnPlayerEnterRadar(playerid, r, _getPlayerSpeed(playerid));
+				break;
+			}
 		}
 	}
+	#if defined inc_Radar_OnPlayerUpdate
+		return inc_Radar_OnPlayerUpdate(playerid);
+	#else
+		return 1;
+	#endif
 }
-
-// -----------------------------------------------------------------------------
-
-// END	OF	FILE
+#if defined _ALS_OnPlayerUpdate
+	#undef OnPlayerUpdate
+#else
+	#define _ALS_OnPlayerUpdate
+#endif
+ 
+#define OnPlayerUpdate inc_Radar_OnPlayerUpdate
+#if defined inc_Radar_OnPlayerUpdate
+	forward inc_Radar_OnPlayerUpdate(playerid);
+#endif
 
 // -----------------------------------------------------------------------------
