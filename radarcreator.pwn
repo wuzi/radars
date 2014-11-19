@@ -32,7 +32,7 @@
 		Y_Less - GetXYInFrontOfPlayer function
 
 	Version:
-		1.1
+		1.2
 */
 
 //------------------------------------------------------------------------------
@@ -46,8 +46,8 @@
 
 #define DIALOG_UPDATES		2157
 #define DIALOG_EDITOR		2158
-#define DIALOG_CAPTION		"Radar Editor 1.1"
-#define DIALOG_INFO			"1.\tCreate a Radar\n2.\tEdit nearest radar\n3.\tGo to radar\n4.\tExport nearest radar\n5.\tExport all radars\n6.\tUpdates"
+#define DIALOG_CAPTION		"Radar Editor 1.2"
+#define DIALOG_INFO			"1.\tCreate a Radar\n2.\tEdit nearest radar\n3.\tDelete nearest radar\n4.\tGo to radar\n5.\tExport nearest radar\n6.\tExport all radars\n7.\tUpdates"
 
 #define COLOR_INFO			0x00a4a7ff
 #define COLOR_ERROR			0xff4040ff
@@ -178,7 +178,42 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					PlaySelectSound(playerid);
 					return 1;
 				}
-				case 2: //Go to radar
+				case 2: // Delete nearest radar
+				{
+					new
+						radarid = INVALID_RADAR_ID,
+						Float:distance = 20.0,
+						Float:X,
+						Float:Y,
+						Float:Z,
+						Float:placeholder;
+
+					for(new i; i < MAX_RADARS; i++)
+					{
+						if(!IsValidRadar(i))
+							continue;
+
+						GetRadarPosition(i, X, Y, Z, placeholder, placeholder, placeholder);
+						if(GetPlayerDistanceFromPoint(playerid, X, Y, Z) < distance)
+						{
+							distance = GetPlayerDistanceFromPoint(playerid, X, Y, Z);
+							radarid = i;
+						}
+					}
+
+					if(radarid == INVALID_RADAR_ID)
+					{
+						SendClientMessage(playerid, COLOR_ERROR, "* No radars near you!");
+						ShowPlayerDialog(playerid, DIALOG_EDITOR, DIALOG_STYLE_LIST, DIALOG_CAPTION, DIALOG_INFO, "Select", "Cancel");
+						PlayErrorSound(playerid);
+						return 1;
+					}
+
+					DestroyRadar(radarid);
+					PlaySelectSound(playerid);
+					return 1;
+				}
+				case 3: //Go to radar
 				{
 					new
 						Float:X,
@@ -212,7 +247,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					PlaySelectSound(playerid);
 					return 1;
 				}
-				case 3: //Export nearest radar
+				case 4: //Export nearest radar
 				{
 					new
 						radarid = INVALID_RADAR_ID,
@@ -257,7 +292,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			        SendClientMessage(playerid, COLOR_INFO, "* Nearest radar saved to scriptfiles/radars.txt");
 			        return 1;
 				}
-				case 4: // Export all radars
+				case 5: // Export all radars
 				{
 					new count;
 					for(new i; i < MAX_RADARS; i++)
@@ -290,7 +325,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
 					return 1;
 				}
-				case 5: // Updates
+				case 6: // Updates
 				{
 					ShowPlayerDialog(playerid, DIALOG_UPDATES, DIALOG_STYLE_MSGBOX, DIALOG_CAPTION, "Radar Creator & Radar Include created by WiRR\n\nFor new updates or report a bug/suggestion go to:\nhttps://github.com/WiRR-/SA-MP-Radars", "Back", "");
 					PlaySelectSound(playerid);
