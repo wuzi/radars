@@ -24,7 +24,7 @@ public OnGameModeInit()
     return 1;
 }
 
-public OnPlayerEnterRadar(playerid, radarid, speed)
+public OnPlayerEnterRadar(playerid, radarid, Float:speed)
 {
     switch(radarid)
     {
