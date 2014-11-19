@@ -6,12 +6,11 @@ A SA:MP library containing functions to create radars that detect when a player 
 
 Use the radar creator filterscript to create and save radars.
 
-![](https://sc-cdn.scaleengine.net/i/da34b2f0d2341945fcea4538fdcd5adc.jpg)
+![](https://sc-cdn.scaleengine.net/i/316f349dbffc7cd615e66819c38c499c.jpg)
 
-![](https://sc-cdn.scaleengine.net/i/4e333249e609edb0cc29a0bf0b9660c9.jpg)
+![](https://sc-cdn.scaleengine.net/i/7f8ce6bb40266c65ca1e7a8dc47bbde4.jpg)
 
-![](https://sc-cdn.scaleengine.net/i/e41a075b5682565b74bb949f29d8c43b.jpg)
-This may look awkward but it is because i am using wine, on windows it will be okay.
+![](https://sc-cdn.scaleengine.net/i/ad6beffd219e49eaf56a057165c1e231.jpg)
 
 ##Example code
 
