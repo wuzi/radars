@@ -40,7 +40,7 @@
 #define FILTERSCRIPT
 
 #include <a_samp>
-#include "radars.inc"
+#include <radars>
 
 //------------------------------------------------------------------------------
 
@@ -103,16 +103,16 @@ public OnPlayerSpawn(playerid)
 
 public OnPlayerCommandText(playerid, cmdtext[])
 {
-	if(!strcmp(cmdtext, "/radar", true))
-	{
-		if(gPlayerData[playerid][E_RC_PLAYER_IS_EDITING])
-			return SendClientMessage(playerid, COLOR_ERROR, "* You are editing a radar already!");
+    if(!strcmp(cmdtext, "/radar", true))
+    {
+    	if(gPlayerData[playerid][E_RC_PLAYER_IS_EDITING])
+    		return SendClientMessage(playerid, COLOR_ERROR, "* You are editing a radar already!");
 
-		ShowPlayerDialog(playerid, DIALOG_EDITOR, DIALOG_STYLE_LIST, DIALOG_CAPTION, DIALOG_INFO, "Select", "Cancel");
-		PlaySelectSound(playerid);
-		return 1;
-	}
-	return 0;
+        ShowPlayerDialog(playerid, DIALOG_EDITOR, DIALOG_STYLE_LIST, DIALOG_CAPTION, DIALOG_INFO, "Select", "Cancel");
+        PlaySelectSound(playerid);
+        return 1;
+    }
+    return 0;
 }
 
 //------------------------------------------------------------------------------
@@ -139,6 +139,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					EditObject(playerid, GetRadarObjectID(gPlayerData[playerid][E_RC_PLAYER_RADAR_ID]));
 					SendClientMessage(playerid, COLOR_INFO, "* Edit the radar position and save.");
 					PlaySelectSound(playerid);
+					return 1;
 				}
 				case 1: //Edit nearest radar
 				{
@@ -175,6 +176,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					gPlayerData[playerid][E_RC_PLAYER_IS_EDITING]	= true;
 					EditObject(playerid, GetRadarObjectID(gPlayerData[playerid][E_RC_PLAYER_RADAR_ID]));
 					PlaySelectSound(playerid);
+					return 1;
 				}
 				case 2: //Go to radar
 				{
@@ -208,6 +210,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 					ShowPlayerDialog(playerid, DIALOG_EDITOR+1, DIALOG_STYLE_LIST, DIALOG_CAPTION, dialogList, "Go", "Back");
 					PlaySelectSound(playerid);
+					return 1;
 				}
 				case 3: //Export nearest radar
 				{
@@ -246,36 +249,52 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 					new textToSave[128];
 					new File:radarFile = fopen("radars.txt", io_append);
-					format(textToSave, 256, "CreateRadar(%f, %f, %f, %f, %f, %f);", X, Y, Z, rX, rY, rZ);
-					fwrite(radarFile, textToSave);
-					fclose(radarFile);
+			        format(textToSave, 256, "CreateRadar(%f, %f, %f, %f, %f, %f);", X, Y, Z, rX, rY, rZ);
+			        fwrite(radarFile, textToSave);
+			        fclose(radarFile);
 
-					PlaySelectSound(playerid);
-					SendClientMessage(playerid, COLOR_INFO, "* Nearest radar saved to scriptfiles/radars.txt");
+			        PlaySelectSound(playerid);
+			        SendClientMessage(playerid, COLOR_INFO, "* Nearest radar saved to scriptfiles/radars.txt");
+			        return 1;
 				}
 				case 4: // Export all radars
 				{
+					new count;
 					for(new i; i < MAX_RADARS; i++)
 					{
 						if(!IsValidRadar(i))
 							continue;
+
+						count++;
 
 						new Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ;
 						GetRadarPosition(i, X, Y, Z, rX, rY, rZ);
 
 						new textToSave[128];
 						new File:radarFile = fopen("radars.txt", io_append);
-						format(textToSave, 256, "CreateRadar(%f, %f, %f, %f, %f, %f);", X, Y, Z, rX, rY, rZ);
-						fwrite(radarFile, textToSave);
-						fclose(radarFile);
+			        	format(textToSave, 256, "CreateRadar(%f, %f, %f, %f, %f, %f);", X, Y, Z, rX, rY, rZ);
+			        	fwrite(radarFile, textToSave);
+			        	fclose(radarFile);
 					}
-					PlaySelectSound(playerid);
-					SendClientMessage(playerid, COLOR_INFO, "* All radars saved to scriptfiles/radars.txt");
+
+					if(count != 0)
+					{
+						PlaySelectSound(playerid);
+			        	SendClientMessage(playerid, COLOR_INFO, "* All radars saved to scriptfiles/radars.txt");						
+					}
+					else
+					{
+						PlayErrorSound(playerid);
+			        	SendClientMessage(playerid, COLOR_ERROR, "* No radars created!");	
+			        	ShowPlayerDialog(playerid, DIALOG_EDITOR, DIALOG_STYLE_LIST, DIALOG_CAPTION, DIALOG_INFO, "Select", "Cancel");
+					}
+					return 1;
 				}
 				case 5: // Updates
 				{
 					ShowPlayerDialog(playerid, DIALOG_UPDATES, DIALOG_STYLE_MSGBOX, DIALOG_CAPTION, "Radar Creator & Radar Include created by WiRR\n\nFor new updates or report a bug/suggestion go to:\nhttps://github.com/WiRR-/SA-MP-Radars", "Back", "");
 					PlaySelectSound(playerid);
+					return 1;
 				}
 			}
 		}
@@ -304,6 +323,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			SetPlayerPos(playerid, X+1.0, Y+1.0, Z+1.0);
 
 			PlaySelectSound(playerid);
+			return 1;
 		}
 		case DIALOG_UPDATES:
 		{
@@ -325,10 +345,10 @@ public OnPlayerEditObject(playerid, playerobject, objectid, response, Float:fX, 
 
 	if(!playerobject)
 	{
-		if(!IsValidObject(objectid)) return 1;
+	    if(!IsValidObject(objectid)) return 1;
 
-		SetObjectPos(objectid, fX, fY, fZ);		          
-		SetObjectRot(objectid, fRotX, fRotY, fRotZ);
+	    SetObjectPos(objectid, fX, fY, fZ);		          
+        SetObjectRot(objectid, fRotX, fRotY, fRotZ);
 	}
  
 	if(response == EDIT_RESPONSE_FINAL)
@@ -355,7 +375,7 @@ public OnPlayerEditObject(playerid, playerobject, objectid, response, Float:fX, 
 
 //------------------------------------------------------------------------------
 
-public OnPlayerEnterRadar(playerid, radarid, speed)
+public OnPlayerEnterRadar(playerid, radarid, Float:speed)
 {
 	return 1;
 }
@@ -379,7 +399,7 @@ GetXYInFrontOfPlayer(playerid, &Float:x, &Float:y, Float:distance)
 	GetPlayerFacingAngle(playerid, a);
 
 	if (GetPlayerVehicleID(playerid)) {
-		GetVehicleZAngle(GetPlayerVehicleID(playerid), a);
+	    GetVehicleZAngle(GetPlayerVehicleID(playerid), a);
 	}
 
 	x += (distance * floatsin(-a, degrees));
