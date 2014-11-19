@@ -1,3 +1,5 @@
+//------------------------------------------------------------------------------
+
 /*
 	SA-MP Radars include
 	
@@ -10,7 +12,7 @@
 		Permission is hereby granted, free of charge, to any person obtaining a copy
 		of this software and associated documentation files (the "Software"), to deal
 		in the Software without restriction, including without limitation the rights
-		to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+		to use, copy, modiY, merge, publish, distribute, sublicense, and/or sell
 		copies of the Software, and to permit persons to whom the Software is
 		furnished to do so, subject to the following conditions:
 		The above copyright notice and this permission notice shall be included in all
@@ -30,8 +32,10 @@
 		Y_Less - ALS Hooking method
 
 	Version:
-		1.0
+		0.2
 */
+
+//------------------------------------------------------------------------------
 
 #include <a_samp>
 
@@ -40,15 +44,18 @@
 #endif
 #define inc_radars_included
 
+//------------------------------------------------------------------------------
+
 /*
 native CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0, maxspeed = 140, radius = 15.0, activated = true);
 native SetRadarPosition(radarid, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0);
 native GetRadarPosition(radarid, &Float:Y, &Float:Z, &Float:rX, &Float:rY, &Float:rZ);
-native SetRadarActivated(radarid, activated);
+native SetRadarActivated(radarid, bool:activated);
 native SetRadarRadius(radarid, Float:radius);
 native SetRadarMaxSpeed(radarid, maxspeed);
 native IsRadarActivated(radarid);
 native GetRadarMaxSpeed(radarid);
+native GetRadarObjectID(radarid);
 native GetRadarRadius(radarid);
 native IsValidRadar(radarid);
 native DestroyRadar(radarid);
@@ -119,6 +126,11 @@ stock CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float
 
 //------------------------------------------------------------------------------
 
+stock GetRadarObjectID(radarid)
+	return g_eRadarData[radarid][E_RADAR_OBJECTID];
+
+//------------------------------------------------------------------------------
+
 stock IsValidRadar(radarid)
 	return !(g_eRadarData[radarid][E_RADAR_POS][0] == 0.0 && g_eRadarData[radarid][E_RADAR_POS][1] == 0.0 && g_eRadarData[radarid][E_RADAR_POS][2] == 0.0);
 
@@ -149,7 +161,7 @@ stock DestroyRadar(radarid)
 
 // -----------------------------------------------------------------------------
 
-stock SetRadarPosition(radarid, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0)
+stock SetRadarPosition(radarid, Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0)
 {
 	g_eRadarData[radarid][E_RADAR_POS][0] = X;
 	g_eRadarData[radarid][E_RADAR_POS][1] = Y;
@@ -168,7 +180,7 @@ stock SetRadarPosition(radarid, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, 
 
 // -----------------------------------------------------------------------------
 
-stock GetRadarPosition(radarid, &Float:Y, &Float:Z, &Float:rX, &Float:rY, &Float:rZ)
+stock GetRadarPosition(radarid, &Float:X, &Float:Y, &Float:Z, &Float:rX, &Float:rY, &Float:rZ)
 {
 	X = g_eRadarData[radarid][E_RADAR_POS][0];
 	Y = g_eRadarData[radarid][E_RADAR_POS][1];
