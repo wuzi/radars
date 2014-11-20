@@ -284,7 +284,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 					new textToSave[128];
 					new File:radarFile = fopen("radars.txt", io_append);
-			        format(textToSave, 256, "CreateRadar(%f, %f, %f, %f, %f, %f);", X, Y, Z, rX, rY, rZ);
+			        format(textToSave, 256, "CreateRadar(%f, %f, %f, %f, %f, %f);\n", X, Y, Z, rX, rY, rZ);
 			        fwrite(radarFile, textToSave);
 			        fclose(radarFile);
 
@@ -307,7 +307,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 						new textToSave[128];
 						new File:radarFile = fopen("radars.txt", io_append);
-			        	format(textToSave, 256, "CreateRadar(%f, %f, %f, %f, %f, %f);", X, Y, Z, rX, rY, rZ);
+			        	format(textToSave, 256, "CreateRadar(%f, %f, %f, %f, %f, %f);\n", X, Y, Z, rX, rY, rZ);
 			        	fwrite(radarFile, textToSave);
 			        	fclose(radarFile);
 					}
