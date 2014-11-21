@@ -2,7 +2,7 @@
 
 A SA:MP library containing functions to create radars that detect when a player exceeds the speed limit of the radar.
 
-***If you use any speedo it is better to change the include to yours or vice-versa. Otherwise, it will give false-positives.***
+***If you use any get speed function it is better to change the include to yours or vice-versa. Otherwise, it will give false-positives.***
 
 ##Creating a radar
 
