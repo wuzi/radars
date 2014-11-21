@@ -30,9 +30,11 @@
 
 	Contributors:
 		Y_Less - ALS Hooking method
+		Gamer_Z - Player speed calculation
+		MP2 - Player speed calculation
 
 	Version:
-		0.4
+		0.5
 */
 
 //------------------------------------------------------------------------------
@@ -47,7 +49,7 @@
 //------------------------------------------------------------------------------
 
 /*
-native CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0, maxspeed = 140, radius = 15.0, activated = true);
+native CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0, maxspeed = 60, radius = 15.0, activated = true);
 native SetRadarPosition(radarid, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0);
 native GetRadarPosition(radarid, &Float:Y, &Float:Z, &Float:rX, &Float:rY, &Float:rZ);
 native SetRadarActivated(radarid, bool:activated);
@@ -95,7 +97,7 @@ forward OnPlayerEnterRadar(playerid, radarid, Float:speed);
 
 //------------------------------------------------------------------------------
 
-stock CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0, Float:MaxSpeed = 80.0, Float:Radius = 15.0, bool:isActive = true)
+stock CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0, Float:MaxSpeed = 60.0, Float:Radius = 15.0, bool:isActive = true)
 {
 	new radarid = GetFreeRadarID();
 
@@ -262,14 +264,19 @@ stock IsPlayerInRadar(playerid, radarid)
 
 // -----------------------------------------------------------------------------
 
-stock Float:_getPlayerSpeed(playerid, bool:UseMPH = false)
-{
-    new Float:speed_x,Float:speed_y,Float:speed_z,Float:temp_speed;
-    GetVehicleVelocity(GetPlayerVehicleID(playerid), speed_x, speed_y, speed_z);
-    if(UseMPH == false) temp_speed = floatsqroot(((speed_x*speed_x)+(speed_y*speed_y))+(speed_z*speed_z))*136.666667;
-    else temp_speed = floatsqroot(((speed_x*speed_x)+(speed_y*speed_y))+(speed_z*speed_z))*85.4166672;
-    floatround(temp_speed,floatround_round);
-    return temp_speed;
+stock Float:_getPlayerSpeed(playerid)
+{// Using Gamer_Z and MP2 calculations (https://github.com/grasmanek94/GPB/blob/master/Speeds/AccurateGTASpeed.inc)
+	new Float:VelocityX, Float:VelocityY, Float:VelocityZ;
+	if(IsPlayerInAnyVehicle(playerid))
+		GetVehicleVelocity(GetPlayerVehicleID(playerid), VelocityX, VelocityY, VelocityZ);
+	else
+		GetPlayerVelocity(playerid, VelocityX, VelocityY, VelocityZ);
+
+	#if !defined USE_MPH
+		return (VelocityX*VelocityX+VelocityY*VelocityY+VelocityZ*VelocityZ)*(427833329/5871364);
+	#else
+		return (VelocityX*VelocityX+VelocityY*VelocityY+VelocityZ*VelocityZ)*(427833329/9449044);
+	#endif
 }
 
 // -----------------------------------------------------------------------------
