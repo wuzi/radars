@@ -32,7 +32,7 @@
 		Y_Less - GetXYInFrontOfPlayer function
 
 	Version:
-		1.2
+		1.3
 */
 
 //------------------------------------------------------------------------------
@@ -40,7 +40,7 @@
 #define FILTERSCRIPT
 
 #include <a_samp>
-#include <radars>
+#include "../include/radars.inc"
 
 //------------------------------------------------------------------------------
 
@@ -388,6 +388,9 @@ public OnPlayerEditObject(playerid, playerobject, objectid, response, Float:fX, 
  
 	if(response == EDIT_RESPONSE_FINAL)
 	{
+		if(objectid == GetRadarObjectID(gPlayerData[playerid][E_RC_PLAYER_RADAR_ID]))
+			SetRadarPosition(gPlayerData[playerid][E_RC_PLAYER_RADAR_ID], fX, fY, fZ, fRotX, fRotY, fRotZ);
+
 		gPlayerData[playerid][E_RC_PLAYER_IS_EDITING] = false;
 		PlaySelectSound(playerid);
 	}
@@ -404,6 +407,8 @@ public OnPlayerEditObject(playerid, playerobject, objectid, response, Float:fX, 
 			SetPlayerObjectPos(playerid, objectid, oldX, oldY, oldZ);
 			SetPlayerObjectRot(playerid, objectid, oldRotX, oldRotY, oldRotZ);
 		}
+		gPlayerData[playerid][E_RC_PLAYER_IS_EDITING] = false;
+		PlayCancelSound(playerid);
 	}
 	return 1;
 }
