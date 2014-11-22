@@ -32,7 +32,7 @@
 		Y_Less - GetXYInFrontOfPlayer function
 
 	Version:
-		1.3
+		1.4
 */
 
 //------------------------------------------------------------------------------
@@ -46,7 +46,7 @@
 
 #define DIALOG_UPDATES		2157
 #define DIALOG_EDITOR		2158
-#define DIALOG_CAPTION		"Radar Editor 1.3"
+#define DIALOG_CAPTION		"Radar Editor 1.4"
 #define DIALOG_INFO			"1.\tCreate a Radar\n2.\tEdit nearest radar\n3.\tDelete nearest radar\n4.\tGo to radar\n5.\tExport nearest radar\n6.\tExport all radars\n7.\tUpdates"
 
 #define COLOR_INFO			0x00a4a7ff
@@ -417,6 +417,9 @@ public OnPlayerEditObject(playerid, playerobject, objectid, response, Float:fX, 
 
 public OnPlayerEnterRadar(playerid, radarid, Float:speed)
 {
+	new message[64];
+	format(message, sizeof(message), "* You entered in radarid: %d at %.0f KMH.", radarid, speed);
+	SendClientMessage(playerid, COLOR_INFO, message);
 	return 1;
 }
 
