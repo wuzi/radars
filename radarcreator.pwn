@@ -32,7 +32,7 @@
 		Y_Less - GetXYInFrontOfPlayer function
 
 	Version:
-		1.4
+		1.5
 */
 
 //------------------------------------------------------------------------------
@@ -46,7 +46,7 @@
 
 #define DIALOG_UPDATES		2157
 #define DIALOG_EDITOR		2158
-#define DIALOG_CAPTION		"Radar Editor 1.4"
+#define DIALOG_CAPTION		"Radar Editor 1.5"
 #define DIALOG_INFO			"1.\tCreate a Radar\n2.\tEdit nearest radar\n3.\tDelete nearest radar\n4.\tGo to radar\n5.\tExport nearest radar\n6.\tExport all radars\n7.\tUpdates"
 
 #define COLOR_INFO			0x00a4a7ff
@@ -399,13 +399,22 @@ public OnPlayerEditObject(playerid, playerobject, objectid, response, Float:fX, 
 	{
 		if(!playerobject)
 		{
-			SetObjectPos(objectid, oldX, oldY, oldZ);
-			SetObjectRot(objectid, oldRotX, oldRotY, oldRotZ);
+			if(objectid == GetRadarObjectID(gPlayerData[playerid][E_RC_PLAYER_RADAR_ID]))
+			{
+				new Float:rPos[3], Float:rRot[3];
+				GetRadarPosition(gPlayerData[playerid][E_RC_PLAYER_RADAR_ID], rPos[0], rPos[1], rPos[2], rRot[0], rRot[1], rRot[2]);
+				SetRadarPosition(gPlayerData[playerid][E_RC_PLAYER_RADAR_ID], rPos[0], rPos[1], rPos[2], rRot[0], rRot[1], rRot[2]);
+			}
+			else
+			{
+				SetObjectPos(objectid, oldX, oldY, oldZ);
+				SetObjectRot(objectid, oldRotX, oldRotY, oldRotZ);				
+			}
 		}
 		else
 		{
 			SetPlayerObjectPos(playerid, objectid, oldX, oldY, oldZ);
-			SetPlayerObjectRot(playerid, objectid, oldRotX, oldRotY, oldRotZ);
+			SetPlayerObjectRot(playerid, objectid, oldRotX, oldRotY, oldRotZ);				
 		}
 		gPlayerData[playerid][E_RC_PLAYER_IS_EDITING] = false;
 		PlayCancelSound(playerid);
