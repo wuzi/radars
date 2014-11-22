@@ -34,7 +34,7 @@
 		MP2 - Player speed calculation
 
 	Version:
-		0.5
+		0.6
 */
 
 //------------------------------------------------------------------------------
@@ -49,7 +49,7 @@
 //------------------------------------------------------------------------------
 
 /*
-native CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0, maxspeed = 60, radius = 15.0, activated = true);
+native CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0, Float:MaxSpeed = 0, Float:Radius = 15.0, bool:isActive = true);
 native SetRadarPosition(radarid, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0);
 native GetRadarPosition(radarid, &Float:Y, &Float:Z, &Float:rX, &Float:rY, &Float:rZ);
 native SetRadarActivated(radarid, bool:activated);
@@ -97,7 +97,7 @@ forward OnPlayerEnterRadar(playerid, radarid, Float:speed);
 
 //------------------------------------------------------------------------------
 
-stock CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0, Float:MaxSpeed = 60.0, Float:Radius = 15.0, bool:isActive = true)
+stock CreateRadar(Float:X, Float:Y, Float:Z, Float:rX, Float:rY, Float:rZ, Float:DrawDistance = 200.0, Float:MaxSpeed = 0.0, Float:Radius = 15.0, bool:isActive = true)
 {
 	new radarid = GetFreeRadarID();
 
