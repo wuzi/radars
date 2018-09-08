@@ -1,20 +1,12 @@
-##SA-MP Speed Radars
+## Radars
 
-A SA:MP library containing functions to create radars that detect when a player exceeds the speed limit of the radar.
+A SA:MP library containing functions to create speed radars to detect when a player exceeds the speed limit.
 
-***If you use any get speed function it is better to change the include to yours or vice-versa. Otherwise, it will give false-positives.***
+### Creating a radar
 
-##Creating a radar
+You can use the [radar creator](https://github.com/Wuzi/radars/blob/master/radarcreator.pwn) or place the object id 18880 with [samp-map-editor](http://forum.sa-mp.com/showthread.php?t=282801) and get the coordinates.
 
-Use the radar creator filterscript to create and save radars.
-
-![](https://sc-cdn.scaleengine.net/i/316f349dbffc7cd615e66819c38c499c.jpg)
-
-![](https://sc-cdn.scaleengine.net/i/7f8ce6bb40266c65ca1e7a8dc47bbde4.jpg)
-
-![](https://sc-cdn.scaleengine.net/i/ad6beffd219e49eaf56a057165c1e231.jpg)
-
-##Example code
+### Example
 
 ```c
 new gRadar;
@@ -39,6 +31,6 @@ public OnPlayerEnterRadar(playerid, radarid, Float:speed)
 }
 ```
 
-##Documentation
+### Functions
 
-Check wiki for full functions documentation.
+Check [wiki](https://github.com/Wuzi/radars/wiki/Documentation) for a list with functions.
